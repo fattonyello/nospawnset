@@ -1,8 +1,17 @@
 package net.fattonyello.nospawnset;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.world.item.BedItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.util.*;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,6 +34,20 @@ public class NoSpawnSet {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
 
+    }
+
+    @SubscribeEvent
+    public void onBedItemSetSpawn(PlayerSetSpawnEvent event) {
+
+        BlockPos blockPos = event.getNewSpawn();
+        BlockState blockState = event.getEntity().getCommandSenderWorld().getBlockState(blockPos);
+        BedBlock bedBlock = (BedBlock) blockState.getBlock();
+
+        ItemStack bedItemStack = bedBlock.asItem().getDefaultInstance();
+
+        if (bedItemStack.getItem() instanceof BedItem) {
+            event.setCanceled(true);
+        }
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent

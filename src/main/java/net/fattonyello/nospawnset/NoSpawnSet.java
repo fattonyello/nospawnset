@@ -3,6 +3,7 @@ package net.fattonyello.nospawnset;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BedItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.BedBlock;
@@ -11,6 +12,7 @@ import net.minecraft.util.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -48,6 +50,21 @@ public class NoSpawnSet {
         if (bedItemStack.getItem() instanceof BedItem) {
             event.setCanceled(true);
         }
+
+    }
+
+    @SubscribeEvent
+    public void onPlayerDeath(LivingDeathEvent event) {
+
+        if (event.getEntity() instanceof Player) {
+
+            Player player = (Player) event.getEntity();
+
+            player.experienceLevel = 0;
+            player.totalExperience = 0;
+
+        }
+
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent

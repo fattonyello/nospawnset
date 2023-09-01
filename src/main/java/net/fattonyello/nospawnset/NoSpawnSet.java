@@ -60,6 +60,7 @@ public class NoSpawnSet {
 
             Player player = (Player) event.getEntity();
 
+            player.experienceProgress = 0F;
             player.experienceLevel = 0;
             player.totalExperience = 0;
 
